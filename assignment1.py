@@ -1,14 +1,17 @@
 from flask import Flask, render_template
 import json
-import urllib
+import requests
 import webbrowser
+import requests_toolbelt.adapters.appengine
+
+requests_toolbelt.adapters.appengine.monkeypatch()
 
 # Request JSON Object from NASA
 target = 'https://api.nasa.gov/planetary/apod?api_key='
 key = 'DEMO_KEY'
 
-apod_raw = urllib.request.urlopen(target + key)
-apod_raw = apod_raw.read()
+apod_raw = requests.get(target + key)
+apod_raw = apod_raw.content
 apod_obj = json.loads(apod_raw.decode('utf-8'))
 
 app = Flask(__name__)
